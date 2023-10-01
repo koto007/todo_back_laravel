@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title', 30);
-            $table->boolean('completed')->unsigned()->nullable(false);
+            $table->boolean('completed')->unsigned()->nullable(false)->default(false);
             $table->unsignedBigInteger('category_id')->nullable(true);
             $table->timestamps();
             // $table->foreign('category_id')
