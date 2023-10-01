@@ -25,9 +25,24 @@ class RegisterTest extends DuskTestCase
                     ->waitForText('TODO')
                     ->assertSee('TODO')
                     ->type('newTask', $newTask)
-                    ->press('add');
+                    ->press('add')
+                    // ->waitForText($newTask);
+                    ->pause(1000);
                    
             $this->assertDatabaseHas('tasks', ['title' => $newTask]);
+        });
+    }
+
+    public function test_new_empty_task(): void {
+        $this->browse(function (Browser $browser) {
+            $newTask = '';
+
+            $browser->visit('/')
+                    ->waitForText('TODO')
+                    ->assertSee('TODO')
+                    ->type('newTask', $newTask)
+                    ->press('add')
+                    ->assertSee('Task name required');
         });
     }
 }

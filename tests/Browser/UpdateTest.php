@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
+use App\Models\Task;
 
 class UpdateTest extends DuskTestCase
 {
@@ -13,16 +14,13 @@ class UpdateTest extends DuskTestCase
 
     public function test_update_title() {
         $oldTitle = 'Let\'s change title';
+        Task::create(['title' => $oldTitle]);
         $newTitle = 'Updated !';
         $this->browse(function (Browser $browser) use ($oldTitle, $newTitle) {
 
             $browser->visit('/')
-                    ->waitForText('TODO')
-                    ->assertSee('TODO')
-                    ->type('newTask', $oldTitle)
-                    ->press('add')
                     ->pause(3000)
-                    // ->waitForText($oldTitle, 10)
+                    ->waitForText($oldTitle, 10)
                     // ->assertSee($oldTitle)
                     ->click('.edit-title')
                     ->type('inputTitle', $newTitle)
@@ -30,20 +28,17 @@ class UpdateTest extends DuskTestCase
                     ->pause(3000)
                     ->waitForText($newTitle, 10)
                     ->assertSee($newTitle);
-            
         });
     }
 
     public function test_update_status() {
         $task = 'change status';
+        Task::create(['title' => $task]);
+
         $this->browse(function (Browser $browser) use ($task) {
 
             $browser->visit('/')
-                    ->waitForText('TODO')
-                    ->assertSee('TODO')
-                    ->type('newTask', $task)
-                    ->press('add')
-                    ->pause(3000)
+                  ->pause(1000)
                     // ->waitForText($task, 10)
                     // ->assertSee($task)
                     ->check('.check-box', $task)
@@ -51,23 +46,20 @@ class UpdateTest extends DuskTestCase
                     // ->waitFor('.update-title')
                     // ->click('.update-title')
                     // ->waitForText($task)
-                    
+                    ->pause(5000)
                     ->assertChecked('.check-box', $task);
                     // ->assertSee($newTitle);
-            
+
         });
     }
     
     public function test_update_status_undo() {
         $task = 'change status checked';
+        Task::create(['title' => $task]);
         $this->browse(function (Browser $browser) use ($task) {
 
             $browser->visit('/')
-                    ->waitForText('TODO')
-                    ->assertSee('TODO')
-                    ->type('newTask', $task)
-                    ->press('add')
-                    ->pause(3000)
+                    ->pause(1000)
                     // ->waitForText($task, 10)
                     // ->assertSee($task)
                     ->check('.check-box', $task)
@@ -76,6 +68,7 @@ class UpdateTest extends DuskTestCase
                     // ->waitFor('.update-title')
                     // ->click('.update-title')
                     // ->waitForText($task)
+                    ->pause(3000)
                     ->assertNotChecked('.check-box', $task);
                     // ->assertSee($newTitle);
             

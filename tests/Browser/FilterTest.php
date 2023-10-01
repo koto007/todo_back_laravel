@@ -9,22 +9,29 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Database\Seeders\StatusTableSeeder;
 use Database\Seeders\TaskTableSeeder;
+use App\Models\Task;
 
 class FilterTest extends DuskTestCase
 {
-    // use DatabaseMigrations;
+    use DatabaseTruncation;
 
     public function test_filter_status(): void {
         $this->seed(StatusTableSeeder::class);
         $this->seed(TaskTableSeeder::class);
-        $this->browse(function (Browser $browser) {
+        $taskInProgress = Task::create(['title' => 'task in progress']);
+        $taskCompleted = Task::create(['title' => 'task completed']);
+
+        $this->browse(function (Browser $browser) use($taskCompleted) {
             $browser->visit('/')
                 ->waitForText('TODO')
-                ->assertVisible('.each-task.COMP')
-                ->assertVisible('.each-task.INPR')
+                ->pause(2000)
+                // ->waitForText('task in progress')
+                ->assertVisible('.each-task-COMP')
+                ->assertVisible('.each-task-INPR')
+                ->click('.delete', $taskCompleted)
                 ->click('.COMP button')
-                ->assertVisible('.each-task.COMP')
-                ->assertMissing('.each-task.INPR')
+                ->assertVisible('.each-task-COMP')
+                ->assertMissing('.each-task-INPR')
                 ;
         });
     }

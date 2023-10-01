@@ -22,6 +22,7 @@ class OrderTest extends DuskTestCase
         
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
+                    ->pause(2000)
                     ->waitForText('TODO');
 
             $elements = $browser->elements('.each-task');

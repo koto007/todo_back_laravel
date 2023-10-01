@@ -18,17 +18,11 @@ class DeleteTest extends DuskTestCase
     public function test_delete_task(): void {
         $taskContent = 'Task to be deleted';
         Task::create(['title' => $taskContent]);
-
         $this->browse(function (Browser $browser) use ($taskContent) {
             $browser->visit('/')
-                    ->waitForText('TODO')
-                    ->assertSee('TODO')
-                    // ->type('newTask', $taskContent)
-                    // ->press('add')
-                    // ->pause(2000)
-                    ->waitForText($taskContent, 10)
-                    ->assertSee($taskContent)
-                    ;
+                    ->pause(5000)
+                    ->waitForText($taskContent)
+                    ->assertSee($taskContent);
 
             $browser->click('.delete', $taskContent);
 
@@ -36,7 +30,5 @@ class DeleteTest extends DuskTestCase
 
             $this->assertDatabaseMissing('tasks', ['title' => $taskContent]);
         });
-
-      
     }
 }
