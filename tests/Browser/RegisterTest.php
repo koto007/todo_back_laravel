@@ -11,21 +11,23 @@ use App\Http\Controllers\Api\TaskController;
 use Database\Factories\TaskFactory as factory;
 use App\Models\Task;
 
-class ExampleTest extends DuskTestCase
+class RegisterTest extends DuskTestCase
 {   
-    use DatabaseTruncation;
+    // use DatabaseTruncation;
 
     // protected $exceptTables = ['tasks'];
 
-    /**
-     * A basic browser test example.
-     */
-    public function testBasicExample(): void
-    {
+    public function test_new_task(): void {
         $this->browse(function (Browser $browser) {
+            $newTask = 'Finish application';
+
             $browser->visit('/')
                     ->waitForText('TODO')
-                    ->assertSee('TODO');
+                    ->assertSee('TODO')
+                    ->type('newTask', $newTask)
+                    ->press('add');
+                   
+            $this->assertDatabaseHas('tasks', ['title' => $newTask]);
         });
     }
 }

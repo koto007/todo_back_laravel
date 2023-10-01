@@ -7,10 +7,21 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use Database\Seeders\StatusTableSeeder;
+use Database\Seeders\TaskTableSeeder;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Run the seed command to populate the database
+        // $this->seed(StatusTableSeeder::class);
+        // $this->seed(TaskTableSeeder::class);
+    }
 
     /**
      * Prepare for Dusk test execution.

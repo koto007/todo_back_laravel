@@ -22,7 +22,9 @@ class TaskFactory extends Factory
             'Buy eggs',
             'Learn Laravel',
             'Send letters',
-            'Learn Vuejs'
+            'Learn Vuejs',
+            'Go to the post office',
+            'Buy tickets'
         ];
         return [
             'title' => $array[rand(0,count($array)-1)],
