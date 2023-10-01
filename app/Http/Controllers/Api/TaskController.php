@@ -27,10 +27,15 @@ class TaskController extends Controller
     }
 
     public function updateLabel($id, Request $request) {
+        $title = $request->request->get('key');
         $task = Task::findOrFail($id);
-        $task->update([
-            'title' => $request->request->get('key')
-        ]);
+        if ($title) {
+            $task->update([
+                'title' => $title 
+            ]);
+        } else {
+            return response('The task content cannot be empty.', 400);
+        }
     }
 
     public function updateStatus($id, Request $request) {
@@ -41,11 +46,16 @@ class TaskController extends Controller
     }
 
     public function register(Request $request) {
-        $task = Task::create([
-            'title' => $request->request->get('label'),
-            'completed' => false,
-            'created_at' => Date('Y-m-d H:i:s'),
-            'updated_at' => Date('Y-m-d H:i:s')
-        ]);
+        $title = $request->request->get('label');
+        if ($title) {
+            $task = Task::create([
+                'title' => $request->request->get('label'),
+                'completed' => false,
+                'created_at' => Date('Y-m-d H:i:s'),
+                'updated_at' => Date('Y-m-d H:i:s')
+            ]);
+        } else {
+            return response('The task content cannot be empty.', 400);
+        }
     }
 }
