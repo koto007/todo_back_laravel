@@ -17,7 +17,7 @@ class FilterTest extends DuskTestCase
         $this->seed(StatusTableSeeder::class);
         $this->seed(TaskTableSeeder::class);
 
-        $this->browse(function (Browser $browser) use($taskCompleted) {
+        $this->browse(function (Browser $browser){
             $browser->visit('/')
                 ->waitForText('TODO')
                 ->pause(2000)
