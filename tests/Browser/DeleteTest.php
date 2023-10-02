@@ -6,27 +6,25 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Keyboard;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
 use App\Http\Controllers\Api\TaskController;
 use Database\Factories\TaskFactory as factory;
 use App\Models\Task;
 
 class DeleteTest extends DuskTestCase
 {   
-    use DatabaseTruncation;
-
     public function test_delete_task(): void {
-        $taskContent = 'Task to be deleted';
+        $taskContent = 'Task to be deleted ?';
         Task::create(['title' => $taskContent]);
+        $this->assertDatabaseHas('tasks', ['title' => $taskContent]);
+
         $this->browse(function (Browser $browser) use ($taskContent) {
             $browser->visit('/')
-                    ->pause(5000)
-                    ->waitForText($taskContent)
-                    ->assertSee($taskContent);
-
-            $browser->click('.delete', $taskContent);
-
-            $browser->assertDontSee($taskContent);
+                    ->waitForText('TODO')
+                    ->pause(1000)
+                    ->assertValue('input[name="inputTitle"]', $taskContent)
+                    ->click('.delete', $taskContent)
+                    ->pause(1000)
+                    ->assertDontSee($taskContent);
 
             $this->assertDatabaseMissing('tasks', ['title' => $taskContent]);
         });

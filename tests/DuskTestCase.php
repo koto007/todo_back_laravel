@@ -9,10 +9,11 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Database\Seeders\StatusTableSeeder;
 use Database\Seeders\TaskTableSeeder;
+use Illuminate\Foundation\Testing\DatabaseTruncation;
 
 abstract class DuskTestCase extends BaseTestCase
 {
-    use CreatesApplication;
+    use CreatesApplication, DatabaseTruncation;
 
     protected function setUp(): void
     {

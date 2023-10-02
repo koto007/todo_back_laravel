@@ -7,11 +7,9 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Database\Seeders\StatusTableSeeder;
 use App\Models\Task;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
 
 class OrderTest extends DuskTestCase
 {
-    // use DatabaseTruncation;
 
     public function test_filter_status(): void {
         $this->seed(StatusTableSeeder::class);
@@ -25,14 +23,17 @@ class OrderTest extends DuskTestCase
                     ->pause(2000)
                     ->waitForText('TODO');
 
-            $elements = $browser->elements('.each-task');
+            $tasks = $browser->elements('.each-task input');
+            $values = [];
 
-            $taskTitles = $browser->elements('.each-task')->pluck('input')->toArray();
-            $sortedTitles = $taskTitles;
+            foreach ($tasks as $task) {
+                $values[] = $task->getAttribute('value');
+            }
+
+            $sortedTitles = $values;
             sort($sortedTitles);
 
-            // Assert that the titles match the sorted order
-            $browser->assertEquals($sortedTitles, $taskTitles);
+            $this->assertEquals($sortedTitles, $values);
         });
     }
 }
